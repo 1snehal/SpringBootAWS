@@ -22,12 +22,11 @@ public class BankService {
 		this.bankdao = bankdao;
 	}
 
-	public String handleRequest() {
+	public void handleRequest() {
 		List<Bank> banklist = AmazonS3Utils.amazons3client();
 		for (int i = 0; i < banklist.size(); i++) {
 			Bank banks = banklist.get(i);
 			bankdao.saveBankdatails(banks);
 		}
-		return "Done";
 	}
 }

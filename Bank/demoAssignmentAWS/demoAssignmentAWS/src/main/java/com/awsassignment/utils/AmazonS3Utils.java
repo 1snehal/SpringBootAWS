@@ -20,18 +20,16 @@ import com.awsassignment.pojo.Bank;
 @Service
 public class AmazonS3Utils {
 	public static List<Bank> amazons3client() {
-		BasicAWSCredentials creds = new BasicAWSCredentials("AKIAXI3EZFYHRIDSUHYX",
-				"wAhvDE2ALlL2w7ifrAClTFrb8cOs2t4K0kVEQVnT");
+		BasicAWSCredentials creds = new BasicAWSCredentials("AKIAXI3EZFYHU4VVLHF3",
+				"M34ivx4/AjVW63SIqNpWM8BG5GUKB2IpSIyOquaR");
 		AmazonS3 amazons3 = AmazonS3Client.builder().withRegion("us-east-1")
 				.withCredentials(new AWSStaticCredentialsProvider(creds)).build();
 		ListObjectsV2Result result = amazons3.listObjectsV2("bankapplicationbuckets");
 		List<S3ObjectSummary> objects = result.getObjectSummaries();
-		S3Object s = null;
-		BufferedReader ib = null;
 		List<Bank> bankcollect = new ArrayList<>();
 		for (S3ObjectSummary os : objects) {
-			s = amazons3.getObject("bankapplicationbuckets", os.getKey());
-			ib = new BufferedReader(new InputStreamReader(s.getObjectContent()));
+			S3Object s = amazons3.getObject("bankapplicationbuckets", os.getKey());
+			BufferedReader ib = new BufferedReader(new InputStreamReader(s.getObjectContent()));
 			Bank bank = null;
 			String line = null;
 			try {

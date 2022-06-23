@@ -1,9 +1,0 @@
-com\awsassignment\configuration\BankConfiguration.class
-com\awsassignment\service\AmazonS3Utils.class
-com\awsassignment\dao\BankDaoImpl.class
-com\awsassignment\controller\BankController.class
-com\awsassignment\BankApp.class
-com\awsassignment\repository\BankRepository.class
-com\awsassignment\service\BankService.class
-com\awsassignment\pojo\Bank.class
-com\awsassignment\dao\BankDao.class

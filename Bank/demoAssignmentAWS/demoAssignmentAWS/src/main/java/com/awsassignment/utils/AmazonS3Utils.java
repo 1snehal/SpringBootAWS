@@ -49,6 +49,5 @@ public class AmazonS3Utils {
 			}
 		}
 		return bankcollect;
-
 	}
 }

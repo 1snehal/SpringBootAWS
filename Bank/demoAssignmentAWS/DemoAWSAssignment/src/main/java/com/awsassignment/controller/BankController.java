@@ -22,8 +22,8 @@ public class BankController {
 	}
 
 	@RequestMapping("/savedata")
-	public ResponseEntity<String> savedata() throws IOException, BankHandleException {
+	public ResponseEntity<String> savedata() throws BankHandleException, IOException {
 		bankservice.handleRequest();
-		return ResponseEntity.status(HttpStatus.OK).body("Sucessful");
+		return ResponseEntity.status(HttpStatus.CREATED).body("Sucessful");
 	}
 }

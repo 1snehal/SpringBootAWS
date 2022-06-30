@@ -1,6 +1,6 @@
 package com.awsassignment.exception;
 
-public class BankHandleException extends Exception {
+public class BankHandleException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 	String message;
 

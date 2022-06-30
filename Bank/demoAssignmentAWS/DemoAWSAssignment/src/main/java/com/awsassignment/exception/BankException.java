@@ -9,7 +9,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @ControllerAdvice
 public class BankException extends ResponseEntityExceptionHandler {
-	@ResponseStatus
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(value = BankHandleException.class)
 	public ResponseEntity<String> bankexception(BankHandleException bankhandleexception) {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(bankhandleexception.getMessage());

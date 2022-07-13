@@ -1,17 +1,23 @@
 package com.awsassignment.exception;
 
+import java.io.IOException;
+import java.time.LocalTime;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
 public class BankException extends ResponseEntityExceptionHandler {
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	@ExceptionHandler(value = BankHandleException.class)
-	public ResponseEntity<String> bankexception(BankHandleException bankhandleexception) {
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(bankhandleexception.getMessage());
+	@ExceptionHandler(value = IOException.class)
+	public ResponseEntity<Map<String, Object>> bankexception(IOException ioexception) {
+		Map<String, Object> response = new HashMap<>();
+		response.put("error", "file not found");
+		response.put("localtime", LocalTime.now());
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
 	}
 }

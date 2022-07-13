@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
@@ -17,9 +18,9 @@ import com.amazonaws.services.s3.model.ListObjectsV2Result;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.awsassignment.entity.Bank;
-import com.awsassignment.exception.BankHandleException;
 
 @Service
+@PropertySource(value = { "application.properties" })
 public class AmazonS3Utils {
 	@Value(value = "${custom.bucketname}")
 	String bucketname;
@@ -50,29 +51,34 @@ public class AmazonS3Utils {
 		return s3objectlist;
 	}
 
-	public List<Bank> datacollection() throws BankHandleException, IOException {
+	public List<Bank> datacollection() throws IOException {
 		List<S3Object> s3objectcollection = gets3object();
 		List<Bank> bankcollect = new ArrayList<>();
 		for (S3Object s3object : s3objectcollection) {
 			BufferedReader ib = new BufferedReader(new InputStreamReader(s3object.getObjectContent()));
 			Bank bank = null;
 			String line = null;
-			if (ib.readLine() == null) {
-				throw new BankHandleException("data not found");
-			} else {
-				while ((line = ib.readLine()) != null) {
-					String[] data = line.split(",");
-					for (int i = 0; i < data.length; i++) {
-						int transactionamount = Integer.parseInt(data[0]);
-						String transactiontype = data[1];
-						int account = Integer.parseInt(data[2]);
-						String branch = data[3];
-						bank = new Bank(branch, transactiontype, account, transactionamount);
-					}
-					bankcollect.add(bank);
+			ib.readLine();
+			while ((line = ib.readLine()) != null) {
+				String[] data = line.split(",");
+				for (int i = 0; i < data.length; i++) {
+					int transactionamount = Integer.parseInt(data[0]);
+					String transactiontype = data[1];
+					int account = Integer.parseInt(data[2]);
+					String branch = data[3];
+					bank = new Bank(branch, transactiontype, account, transactionamount);
 				}
+				bankcollect.add(bank);
 			}
 		}
 		return bankcollect;
+	}
+
+	public void deleteobject() {
+		AmazonS3 amazons3 = amazons3client();
+		List<S3Object> s3objectcollection = gets3object();
+		for (S3Object s3object : s3objectcollection) {
+			amazons3.deleteObject(bucketname, s3object.getKey());
+		}
 	}
 }

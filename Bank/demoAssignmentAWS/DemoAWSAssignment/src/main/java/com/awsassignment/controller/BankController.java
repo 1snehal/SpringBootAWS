@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.awsassignment.exception.BankHandleException;
 import com.awsassignment.service.BankService;
 
 @RestController
@@ -22,8 +21,14 @@ public class BankController {
 	}
 
 	@RequestMapping("/savedata")
-	public ResponseEntity<String> savedata() throws BankHandleException, IOException {
+	public ResponseEntity<String> savedata() throws IOException {
 		bankservice.handleRequest();
-		return ResponseEntity.status(HttpStatus.CREATED).body("Sucessful");
+		return new ResponseEntity<>(HttpStatus.CREATED);
+	}
+
+	@RequestMapping(value = "/deleteobjects")
+	public ResponseEntity<String> deleteFile() {
+		bankservice.deleteobjects();
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }

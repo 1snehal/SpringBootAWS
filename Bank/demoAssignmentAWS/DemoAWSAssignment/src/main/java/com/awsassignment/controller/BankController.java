@@ -1,7 +1,5 @@
 package com.awsassignment.controller;
 
-import java.io.IOException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,15 +18,11 @@ public class BankController {
 		this.bankservice = bankservice;
 	}
 
-	@RequestMapping("/savedata")
-	public ResponseEntity<String> savedata() throws IOException {
-		bankservice.handleRequest();
-		return new ResponseEntity<>(HttpStatus.CREATED);
-	}
-
-	@RequestMapping(value = "/deleteobjects")
-	public ResponseEntity<String> deleteFile() {
-		bankservice.deleteobjects();
-		return new ResponseEntity<>(HttpStatus.OK);
+	@RequestMapping("/processData")
+	public ResponseEntity<String> processData() throws Exception {
+		boolean result = bankservice.handleRequest();
+		if (result == true)
+			bankservice.deleteFilesFromBucket();
+		return ResponseEntity.status(HttpStatus.OK).body("Sucessful");
 	}
 }

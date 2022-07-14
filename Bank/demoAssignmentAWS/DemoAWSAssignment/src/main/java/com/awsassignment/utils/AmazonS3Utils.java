@@ -1,45 +1,33 @@
 package com.awsassignment.utils;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ListObjectsV2Result;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.awsassignment.entity.Bank;
+import com.awsassignment.exception.BankException;
 
 @Service
-@PropertySource(value = { "application.properties" })
 public class AmazonS3Utils {
 	@Value(value = "${custom.bucketname}")
 	String bucketname;
-	@Value(value = "${custom.accesskey}")
-	String accesskey;
-	@Value(value = "${custom.secretekey}")
-	String secretekey;
-	@Value(value = "${custom.region}")
-	String region;
+	private AmazonS3 amazons3;
 
-	public AmazonS3 amazons3client() {
-		BasicAWSCredentials creds = new BasicAWSCredentials(accesskey, secretekey);
-		AmazonS3 amazons3 = AmazonS3Client.builder().withRegion(region)
-				.withCredentials(new AWSStaticCredentialsProvider(creds)).build();
-		return amazons3;
+	@Autowired
+	public AmazonS3Utils(AmazonS3 amazons3) {
+		this.amazons3 = amazons3;
 	}
 
-	public List<S3Object> gets3object() {
-		AmazonS3 amazons3 = amazons3client();
+	public List<S3Object> getS3Object() {
 		S3Object s3objects = null;
 		List<S3Object> s3objectlist = new ArrayList<>();
 		ListObjectsV2Result result = amazons3.listObjectsV2(bucketname);
@@ -51,8 +39,8 @@ public class AmazonS3Utils {
 		return s3objectlist;
 	}
 
-	public List<Bank> datacollection() throws IOException {
-		List<S3Object> s3objectcollection = gets3object();
+	public List<Bank> dataCollection() throws BankException, Exception {
+		List<S3Object> s3objectcollection = getS3Object();
 		List<Bank> bankcollect = new ArrayList<>();
 		for (S3Object s3object : s3objectcollection) {
 			BufferedReader ib = new BufferedReader(new InputStreamReader(s3object.getObjectContent()));
@@ -74,9 +62,8 @@ public class AmazonS3Utils {
 		return bankcollect;
 	}
 
-	public void deleteobject() {
-		AmazonS3 amazons3 = amazons3client();
-		List<S3Object> s3objectcollection = gets3object();
+	public void deleteFiles() {
+		List<S3Object> s3objectcollection = getS3Object();
 		for (S3Object s3object : s3objectcollection) {
 			amazons3.deleteObject(bucketname, s3object.getKey());
 		}

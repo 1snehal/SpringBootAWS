@@ -5,5 +5,5 @@ import java.util.List;
 import com.awsassignment.entity.Bank;
 
 public interface BankDao {
-	List<Bank> saveBankdatails(List<Bank> bank);
+	List<Bank> saveBankDetails(List<Bank> bank);
 }

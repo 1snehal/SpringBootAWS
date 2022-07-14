@@ -1,6 +1,5 @@
 package com.awsassignment.service;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +20,13 @@ public class BankService {
 		this.amazons3utils = amazons3utils;
 	}
 
-	public void handleRequest() throws IOException {
-		List<Bank> banklist = amazons3utils.datacollection();
-		bankdao.saveBankdatails(banklist);
+	public boolean handleRequest() throws Exception {
+		List<Bank> banklist = amazons3utils.dataCollection();
+		bankdao.saveBankDetails(banklist);
+		return true;
 	}
 
-	public void deleteobjects() {
-		amazons3utils.deleteobject();
+	public void deleteFilesFromBucket() {
+		amazons3utils.deleteFiles();
 	}
 }

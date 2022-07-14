@@ -18,7 +18,7 @@ public class BankDaoImpl implements BankDao {
 	}
 
 	@Override
-	public List<Bank> saveBankdatails(List<Bank> banklist) {
+	public List<Bank> saveBankDetails(List<Bank> banklist) {
 		return bankrepo.saveAll(banklist);
 	}
 }

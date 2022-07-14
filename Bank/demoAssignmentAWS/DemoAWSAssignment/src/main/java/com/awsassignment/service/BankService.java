@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.awsassignment.dao.BankDao;
 import com.awsassignment.entity.Bank;
+import com.awsassignment.exception.BankException;
 import com.awsassignment.utils.AmazonS3Utils;
 
 @Service
@@ -20,7 +21,7 @@ public class BankService {
 		this.amazons3utils = amazons3utils;
 	}
 
-	public boolean handleRequest() throws Exception {
+	public boolean handleRequest() throws BankException, Exception {
 		List<Bank> banklist = amazons3utils.dataCollection();
 		bankdao.saveBankDetails(banklist);
 		return true;

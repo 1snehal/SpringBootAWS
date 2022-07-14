@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.awsassignment.exception.BankException;
 import com.awsassignment.service.BankService;
 
 @RestController
@@ -19,7 +20,7 @@ public class BankController {
 	}
 
 	@RequestMapping("/processData")
-	public ResponseEntity<String> processData() throws Exception {
+	public ResponseEntity<String> processData() throws BankException, Exception {
 		boolean result = bankservice.handleRequest();
 		if (result == true)
 			bankservice.deleteFilesFromBucket();
